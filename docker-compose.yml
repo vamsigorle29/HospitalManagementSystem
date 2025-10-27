@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  patient-service:
+    build: ./patient-service
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - DATABASE_URL=sqlite:///./patient.db
+      - PATIENT_SERVICE_HOST=0.0.0.0
+      - PATIENT_SERVICE_PORT=8001
+    volumes:
+      - ./patient-service:/app
+      - patient-db:/data
+    networks:
+      - hms-network
+
+  doctor-service:
+    build: ./doctor-service
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+      - DATABASE_URL=sqlite:///./doctor.db
+      - DOCTOR_SERVICE_HOST=0.0.0.0
+      - DOCTOR_SERVICE_PORT=8002
+    volumes:
+      - ./doctor-service:/app
+      - doctor-db:/data
+    networks:
+      - hms-network
+
+  billing-service:
+    build: ./billing-service
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+      - DATABASE_URL=sqlite:///./billing.db
+      - BILLING_SERVICE_HOST=0.0.0.0
+      - BILLING_SERVICE_PORT=8003
+    volumes:
+      - ./billing-service:/app
+      - billing-db:/data
+    networks:
+      - hms-network
+
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "8004:8004"
+    environment:
+      - PORT=8004
+      - DATABASE_URL=sqlite:///./appointment.db
+      - APPOINTMENT_SERVICE_HOST=0.0.0.0
+      - APPOINTMENT_SERVICE_PORT=8004
+      - PATIENT_SERVICE_URL=http://patient-service:8001
+      - DOCTOR_SERVICE_URL=http://doctor-service:8002
+      - BILLING_SERVICE_URL=http://billing-service:8003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:8007
+    volumes:
+      - ./appointment-service:/app
+      - appointment-db:/data
+    networks:
+      - hms-network
+    depends_on:
+      - patient-service
+      - doctor-service
+      - billing-service
+      - notification-service
+
+  prescription-service:
+    build: ./prescription-service
+    ports:
+      - "8005:8005"
+    environment:
+      - PORT=8005
+      - DATABASE_URL=sqlite:///./prescription.db
+      - PRESCRIPTION_SERVICE_HOST=0.0.0.0
+      - PRESCRIPTION_SERVICE_PORT=8005
+    volumes:
+      - ./prescription-service:/app
+      - prescription-db:/data
+    networks:
+      - hms-network
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "8006:8006"
+    environment:
+      - PORT=8006
+      - DATABASE_URL=sqlite:///./payment.db
+      - PAYMENT_SERVICE_HOST=0.0.0.0
+      - PAYMENT_SERVICE_PORT=8006
+    volumes:
+      - ./payment-service:/app
+      - payment-db:/data
+    networks:
+      - hms-network
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8007:8007"
+    environment:
+      - PORT=8007
+      - DATABASE_URL=sqlite:///./notification.db
+      - NOTIFICATION_SERVICE_HOST=0.0.0.0
+      - NOTIFICATION_SERVICE_PORT=8007
+    volumes:
+      - ./notification-service:/app
+      - notification-db:/data
+    networks:
+      - hms-network
+
+volumes:
+  patient-db:
+  doctor-db:
+  billing-db:
+  appointment-db:
+  prescription-db:
+  payment-db:
+  notification-db:
+
+networks:
+  hms-network:
+    driver: bridge
+
