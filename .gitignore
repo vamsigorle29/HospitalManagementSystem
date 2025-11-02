@@ -41,10 +41,18 @@ Thumbs.db
 # Logs
 *.log
 
-# Database
+# Database files (created locally)
 *.db
 *.sqlite
 *.sqlite3
+*-service/*.db
+patient-service/patient.db
+doctor-service/doctor.db
+billing-service/billing.db
+appointment-service/appointment.db
+prescription-service/prescription.db
+payment-service/payment.db
+notification-service/notification.db
 
 # Docker
 .dockerignore
@@ -62,7 +70,16 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
-# CSV data files (if sensitive)
-# Uncomment if CSV files should not be tracked
-# *.csv
+# Temporary files
+*.tmp
+*.bak
+*.swp
 
+# Assignment documents (personal files)
+*.pdf
+*.docx
+SE ZG*.pdf
+SE ZG*.docx
+
+# CSV data files (keep these, but can be ignored if sensitive)
+# *.csv

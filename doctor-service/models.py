@@ -18,6 +18,13 @@ class Doctor(Base):
     specialization = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class DoctorCreate(BaseModel):
+    name: str
+    email: EmailStr
+    phone: str
+    department: str
+    specialization: str
+
 class DoctorResponse(BaseModel):
     doctor_id: int
     name: str

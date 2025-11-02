@@ -133,3 +133,9 @@ def get_bill(bill_id: int, db: Session = Depends(get_db)):
 def health_check():
     return {"status": "healthy", "service": "billing-service"}
 
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.getenv("PORT", 8003))
+    uvicorn.run(app, host="0.0.0.0", port=port)
+

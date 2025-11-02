@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, JSON, DateTime
 from sqlalchemy.sql import func
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional, Dict, Any
 
 from database import Base
 
@@ -14,7 +15,7 @@ class Notification(Base):
     channel = Column(String, nullable=False)  # SMS, EMAIL
     recipient = Column(String, nullable=False)
     message = Column(String, nullable=False)
-    metadata = Column(JSON)
+    notification_metadata = Column("metadata", JSON)  # Use different Python name, same DB column
     sent_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class NotificationCreate(BaseModel):
@@ -22,7 +23,8 @@ class NotificationCreate(BaseModel):
     channel: str
     recipient: str
     message: str
-    metadata: dict = None
+    metadata: Optional[Dict[str, Any]] = None
+    data: Optional[Dict[str, Any]] = None  # For compatibility with appointment service
 
 class NotificationResponse(BaseModel):
     notification_id: int
@@ -30,7 +32,7 @@ class NotificationResponse(BaseModel):
     channel: str
     recipient: str
     message: str
-    metadata: dict
+    metadata: Optional[Dict[str, Any]]
     sent_at: datetime
     
     class Config:

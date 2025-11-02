@@ -9,7 +9,7 @@ from typing import List, Optional
 import structlog
 
 from database import get_db, init_db
-from models import Doctor, Schedule, SlotAvailability, DoctorResponse
+from models import Doctor, SlotAvailability, DoctorResponse, DoctorCreate
 
 logger = structlog.get_logger()
 
@@ -31,6 +31,23 @@ SLOT_DURATION_MINUTES = 30
 @app.on_event("startup")
 async def startup():
     init_db()
+
+@app.post("/v1/doctors", response_model=DoctorResponse, status_code=201)
+def create_doctor(doctor: DoctorCreate, db: Session = Depends(get_db)):
+    """Create a new doctor"""
+    # Check for existing email
+    existing = db.query(Doctor).filter(Doctor.email == doctor.email).first()
+    if existing:
+        logger.warning("doctor_exists", email=doctor.email)
+        raise HTTPException(status_code=400, detail="Doctor with this email already exists")
+    
+    db_doctor = Doctor(**doctor.dict())
+    db.add(db_doctor)
+    db.commit()
+    db.refresh(db_doctor)
+    
+    logger.info("doctor_created", doctor_id=db_doctor.doctor_id, name=db_doctor.name)
+    return db_doctor
 
 @app.get("/v1/doctors", response_model=List[DoctorResponse])
 def get_doctors(
@@ -134,4 +151,10 @@ def generate_slots_for_date(date):
         current = slot_end
     
     return slots
+
+if __name__ == "__main__":
+    import uvicorn
+    import os
+    port = int(os.getenv("PORT", 8002))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 

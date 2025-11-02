@@ -49,6 +49,64 @@ The system consists of 7 microservices, each with its own database:
 
 ## Quick Start
 
+### Running Locally Without Docker (Quick Testing)
+
+**Prerequisites:**
+- Python 3.8+ installed
+- All dependencies installed (run `pip install -r requirements.txt` in each service directory)
+
+**Using Python Script (Cross-platform)**
+```bash
+# From project root
+python scripts/run_local.py
+```
+
+**Manual Start (Alternative)**
+You can also start each service manually in separate terminals:
+```bash
+# Terminal 1
+cd patient-service
+python app.py
+
+# Terminal 2
+cd doctor-service
+python app.py
+
+# Terminal 3
+cd billing-service
+python app.py
+
+# Terminal 4
+cd notification-service
+python app.py
+
+# Terminal 5
+cd appointment-service
+python app.py
+
+# Terminal 6
+cd prescription-service
+python app.py
+
+# Terminal 7
+cd payment-service
+python app.py
+```
+
+**Testing All Services:**
+```bash
+python scripts/test_local.py
+```
+
+**Service URLs (when running locally):**
+- Patient Service: http://localhost:8001/docs
+- Doctor Service: http://localhost:8002/docs
+- Billing Service: http://localhost:8003/docs
+- Appointment Service: http://localhost:8004/docs
+- Prescription Service: http://localhost:8005/docs
+- Payment Service: http://localhost:8006/docs
+- Notification Service: http://localhost:8007/docs
+
 ### Using Docker Compose (Recommended for local development)
 
 1. Clone and navigate to the project:
