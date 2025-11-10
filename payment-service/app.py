@@ -12,7 +12,14 @@ from models import Payment, PaymentCreate, PaymentResponse
 
 logger = structlog.get_logger()
 
-app = FastAPI(title="Payment Service", version="v1")
+app = FastAPI(
+    title="Payment Service",
+    version="v1",
+    description="Payment processing service with idempotency support",
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
+)
 
 app.add_middleware(
     CORSMiddleware,

@@ -14,7 +14,14 @@ from models import Bill, BillCreate, BillUpdate, BillResponse
 
 logger = structlog.get_logger()
 
-app = FastAPI(title="Billing Service", version="v1")
+app = FastAPI(
+    title="Billing Service",
+    version="v1",
+    description="Billing service with tax calculation",
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
+)
 
 app.add_middleware(
     CORSMiddleware,

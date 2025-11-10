@@ -15,7 +15,14 @@ from utils import mask_pii
 # Structured logging with PII masking
 logger = structlog.get_logger()
 
-app = FastAPI(title="Patient Service", version="v1")
+app = FastAPI(
+    title="Patient Service",
+    version="v1",
+    description="Patient management service with PII masking",
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
+)
 
 # CORS middleware
 app.add_middleware(

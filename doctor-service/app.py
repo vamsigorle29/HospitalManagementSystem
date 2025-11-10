@@ -13,7 +13,14 @@ from models import Doctor, SlotAvailability, DoctorResponse, DoctorCreate
 
 logger = structlog.get_logger()
 
-app = FastAPI(title="Doctor Service", version="v1")
+app = FastAPI(
+    title="Doctor Service",
+    version="v1",
+    description="Doctor management and availability service",
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
+)
 
 app.add_middleware(
     CORSMiddleware,

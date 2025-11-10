@@ -13,7 +13,14 @@ from models import Notification, NotificationCreate, NotificationResponse
 
 logger = structlog.get_logger()
 
-app = FastAPI(title="Notification Service", version="v1")
+app = FastAPI(
+    title="Notification Service",
+    version="v1",
+    description="Notification service for SMS and Email",
+    openapi_url="/v1/openapi.json",
+    docs_url="/v1/docs",
+    redoc_url="/v1/redoc"
+)
 
 app.add_middleware(
     CORSMiddleware,
